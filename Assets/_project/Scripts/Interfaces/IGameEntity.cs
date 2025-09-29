@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace AsteroidsClone
@@ -10,7 +11,10 @@ namespace AsteroidsClone
         float Rotation { get; }
         bool IsActive { get; }
         EntityType Type { get; }
-        void Update(float deltaTime, GameConfig config);
-        void Destroy();
+        
+        event Action<Vector2, float> OnTransformChanged;
+        event Action OnDeactivated;
+        
+        void Update(float deltaTime);
     }
 }

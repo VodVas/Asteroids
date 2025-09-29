@@ -2,37 +2,37 @@ using System;
 
 namespace AsteroidsClone
 {
-    public sealed class EntityController : IDisposable
+    public sealed class EntityController
     {
-        private readonly EntityRegistry _entityManager;
-        private readonly GameConfig _config;
+        private readonly EntityRegistry _entityRegistry;
+        private readonly UfoConfig _ufoConfig;
         private readonly Player _player;
 
-        public EntityRegistry EntityManager => _entityManager; //TODO: под вопросом
+        public EntityRegistry EntityRegistry => _entityRegistry;
 
-        public EntityController(EntityRegistry entityManager, GameConfig config, Player player)
+        public EntityController(EntityRegistry entityManager, UfoConfig ufoConfig, Player player)
         {
-            _entityManager = entityManager ?? throw new ArgumentNullException(nameof(entityManager));
-            _config = config ?? throw new ArgumentNullException(nameof(config));
+            _entityRegistry = entityManager ?? throw new ArgumentNullException(nameof(entityManager));
+            _ufoConfig = ufoConfig ?? throw new ArgumentNullException(nameof(ufoConfig));
             _player = player ?? throw new ArgumentNullException(nameof(player));
         }
 
         public void Initialize()
         {
-            _entityManager.Clear();
+            _entityRegistry.Clear();
         }
 
         public void Update(float deltaTime)
         {
             UpdateEntities(deltaTime);
-            _entityManager.ProcessChanges();
+            _entityRegistry.ProcessChanges();
         }
 
         private void UpdateEntities(float deltaTime)
         {
-            foreach (var entity in _entityManager.Entities)
+            foreach (var entity in _entityRegistry.Entities)
             {
-                entity.Update(deltaTime, _config);
+                entity.Update(deltaTime);
                 UpdateUfoTarget(entity);
             }
         }
@@ -41,12 +41,8 @@ namespace AsteroidsClone
         {
             if (entity is Ufo ufo && _player.IsAlive)
             {
-                ufo.UpdateTarget(_player.Position, _config.UfoSpeed);
+                ufo.UpdateTarget(_player.Position, _ufoConfig.UfoSpeed);
             }
-        }
-
-        public void Dispose()
-        {
         }
     }
 }

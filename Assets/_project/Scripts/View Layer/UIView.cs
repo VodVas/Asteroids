@@ -15,39 +15,45 @@ namespace AsteroidsClone
         [SerializeField] private TextMeshProUGUI _finalScoreText;
         [SerializeField] private GameObject _gameOverPanel;
 
-        private GameController _gameController;
+        private GameState _gameState;
+        private Player _player;
 
         [Inject]
-        public void Construct(GameController gameController)
+        public void Construct(GameState gameState, Player player)
         {
-            _gameController = gameController;
+            _gameState = gameState;
+            _player = player;
         }
 
         private void Start()
         {
-            if (_gameController == null)
+            if (_gameState == null || _player == null)
             {
-                Debug.LogError("GameController is null! Check Zenject setup.");
+                Debug.LogError("GameState or Player is null! Check Zenject setup.");
                 enabled = false;
                 return;
             }
 
-            _gameController.GameState.OnScoreChanged += UpdateScore;
-            _gameController.GameState.OnGameOver += ShowGameOver;
-            _gameController.GameState.OnGameRestarted += HideGameOver;
-            _gameController.Player.OnLaserChargesChanged += UpdateLaserCharges;
+            _gameState.OnScoreChanged += UpdateScore;
+            _gameState.OnGameOver += ShowGameOver;
+            _gameState.OnGameRestarted += HideGameOver;
+            _player.OnLaserChargesChanged += UpdateLaserCharges;
 
             _gameOverPanel.SetActive(false);
         }
 
         private void OnDestroy()
         {
-            if (_gameController != null)
+            if (_gameState != null)
             {
-                _gameController.GameState.OnScoreChanged -= UpdateScore;
-                _gameController.GameState.OnGameOver -= ShowGameOver;
-                _gameController.GameState.OnGameRestarted -= HideGameOver;
-                _gameController.Player.OnLaserChargesChanged -= UpdateLaserCharges;
+                _gameState.OnScoreChanged -= UpdateScore;
+                _gameState.OnGameOver -= ShowGameOver;
+                _gameState.OnGameRestarted -= HideGameOver;
+            }
+            
+            if (_player != null)
+            {
+                _player.OnLaserChargesChanged -= UpdateLaserCharges;
             }
         }
 
@@ -68,22 +74,21 @@ namespace AsteroidsClone
 
         private void UpdatePlayerInfo()
         {
-            if (_gameController == null) return;
+            if (_player == null) return;
 
-            var player = _gameController.Player;
-            _coordinatesText.text = $"Position: ({player.Position.x:F1}, {player.Position.y:F1})";
-            _rotationText.text = $"Rotation: {player.Rotation:F0}°";
-            _speedText.text = $"Speed: {player.Speed:F1}";
-            _laserCooldownText.text = $"Cooldown: {player.LaserCooldown:F1}s";
+            _coordinatesText.text = $"Position: ({_player.Position.x:F1}, {_player.Position.y:F1})";
+            _rotationText.text = $"Rotation: {_player.Rotation:F0}°";
+            _speedText.text = $"Speed: {_player.Speed:F1}";
+            _laserCooldownText.text = $"Cooldown: {_player.LaserCooldown:F1}s";
         }
 
         private void ShowGameOver()
         {
             _gameOverPanel.SetActive(true);
 
-            if (_gameController != null)
+            if (_gameState != null)
             {
-                _finalScoreText.text = $"Final Score: {_gameController.GameState.Score}";
+                _finalScoreText.text = $"Final Score: {_gameState.Score}";
             }
         }
 

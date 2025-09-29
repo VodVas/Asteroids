@@ -1,97 +1,71 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace AsteroidsClone
 {
-    public sealed class EntityFactory : ISpawnService
+    public sealed class EntityFactory : IEntityFactory
     {
-        private readonly GameConfig _config;
+        private readonly ScreenConfig _screenConfig;
+        private readonly AsteroidConfig _asteroidConfig;
+        private readonly WeaponsConfig _weaponsConfig;
+        private readonly SpawningConfig _spawningConfig;
         private readonly GameState _gameState;
-        private readonly EntityRegistry _entityManager;
-        private readonly System.Random _random = new System.Random();
+        private readonly IRandomService _randomService;
 
-        private float _asteroidSpawnTimer;
-        private float _ufoSpawnTimer;
-        private float _currentSpawnDelay;
-
-        public EntityFactory(GameConfig config, GameState gameState, EntityRegistry entityManager)
+        public EntityFactory(ScreenConfig screenConfig, AsteroidConfig asteroidConfig, 
+                              WeaponsConfig weaponsConfig, SpawningConfig spawningConfig,
+                              GameState gameState, IRandomService randomService)
         {
-            _config = config;
+            _screenConfig = screenConfig;
+            _asteroidConfig = asteroidConfig;
+            _weaponsConfig = weaponsConfig;
+            _spawningConfig = spawningConfig;
             _gameState = gameState;
-            _entityManager = entityManager;
-            _currentSpawnDelay = config.InitialSpawnDelay;
+            _randomService = randomService;
         }
 
-        public void Update(float deltaTime)
-        {
-            if (_gameState.IsGameOver) return;
-
-            _asteroidSpawnTimer += deltaTime;
-            _ufoSpawnTimer += deltaTime;
-
-            if (_asteroidSpawnTimer >= _currentSpawnDelay)
-            {
-                SpawnAsteroid();
-                _asteroidSpawnTimer = 0f;
-                _currentSpawnDelay = Mathf.Max(_config.MinSpawnDelay, _currentSpawnDelay * _config.SpawnAcceleration);
-            }
-
-            if (_ufoSpawnTimer >= _currentSpawnDelay * _config.UfoSpawnDelayMultiplier)
-            {
-                SpawnUfo();
-                _ufoSpawnTimer = 0f;
-            }
-        }
-
-        public void SpawnAsteroid(Vector2? position = null, int size = 0)
+        public Asteroid CreateAsteroid(Vector2? position = null, int size = 0)
         {
             var spawnPos = position ?? GetRandomEdgePosition();
-            var asteroidSize = size == 0 ? _config.DefaultAsteroidSize : size;
-            var velocity = GetRandomVelocity(_config.AsteroidSpeeds[3 - asteroidSize]);
-            var asteroid = new Asteroid(_gameState.GetNextEntityId(), spawnPos, velocity, asteroidSize);
-            _entityManager.AddEntity(asteroid);
+            var asteroidSize = size == 0 ? _spawningConfig.DefaultAsteroidSize : size;
+            var velocity = GetRandomVelocity(_asteroidConfig.AsteroidSpeeds[GameConstants.MAX_ASTEROID_SIZE_INDEX - asteroidSize]);
+            var rotation = _randomService.Range(GameConstants.INITIAL_ROTATION, GameConstants.FULL_ROTATION_DEGREES);
+            var rotationSpeed = _randomService.Range(GameConstants.MIN_ASTEROID_ROTATION_SPEED, GameConstants.MAX_ASTEROID_ROTATION_SPEED);
+            
+            return new Asteroid(_gameState.GetNextEntityId(), spawnPos, velocity, asteroidSize, rotation, rotationSpeed, _screenConfig);
         }
 
-        public void SpawnUfo()
+        public Ufo CreateUfo()
         {
             var position = GetRandomEdgePosition();
-            var ufo = new Ufo(_gameState.GetNextEntityId(), position);
-            _entityManager.AddEntity(ufo);
+            return new Ufo(_gameState.GetNextEntityId(), position, _screenConfig);
         }
 
-        public void SpawnBullet(Vector2 position, Vector2 direction, Vector2 playerVelocity)
+        public Bullet CreateBullet(Vector2 position, Vector2 direction, Vector2 playerVelocity)
         {
-            var velocity = direction * _config.BulletSpeed + playerVelocity * _config.BulletInheritVelocityFactor;
-            var rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + _config.VisualBulletRotationOffset;
-            var bullet = new Bullet(_gameState.GetNextEntityId(), position, velocity, rotation, _config.BulletLifetime);
-            _entityManager.AddEntity(bullet);
-        }
-
-        public void Reset()
-        {
-            _asteroidSpawnTimer = 0f;
-            _ufoSpawnTimer = 0f;
-            _currentSpawnDelay = _config.InitialSpawnDelay;
+            var velocity = direction * _weaponsConfig.BulletSpeed + playerVelocity * _weaponsConfig.BulletInheritVelocityFactor;
+            var rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + _weaponsConfig.VisualBulletRotationOffset;
+            
+            return new Bullet(_gameState.GetNextEntityId(), position, velocity, rotation, _weaponsConfig.BulletLifetime, _screenConfig);
         }
 
         private Vector2 GetRandomEdgePosition()
         {
-            var side = _random.Next(4);
-            var halfWidth = _config.ScreenWidth / 2f;
-            var halfHeight = _config.ScreenHeight / 2f;
+            var side = _randomService.Range(0, 4);
+            var halfWidth = _screenConfig.ScreenWidth / GameConstants.HALF_DIVISOR;
+            var halfHeight = _screenConfig.ScreenHeight / GameConstants.HALF_DIVISOR;
 
             return side switch
             {
-                0 => new Vector2(-halfWidth - _config.EdgeSpawnMargin, (float)(_random.NextDouble() * _config.ScreenHeight - halfHeight)),
-                1 => new Vector2(halfWidth + _config.EdgeSpawnMargin, (float)(_random.NextDouble() * _config.ScreenHeight - halfHeight)),
-                2 => new Vector2((float)(_random.NextDouble() * _config.ScreenWidth - halfWidth), -halfHeight - _config.EdgeSpawnMargin),
-                _ => new Vector2((float)(_random.NextDouble() * _config.ScreenWidth - halfWidth), halfHeight + _config.EdgeSpawnMargin)
+                0 => new Vector2(-halfWidth - _spawningConfig.EdgeSpawnMargin, _randomService.Value * _screenConfig.ScreenHeight - halfHeight),
+                1 => new Vector2(halfWidth + _spawningConfig.EdgeSpawnMargin, _randomService.Value * _screenConfig.ScreenHeight - halfHeight),
+                2 => new Vector2(_randomService.Value * _screenConfig.ScreenWidth - halfWidth, -halfHeight - _spawningConfig.EdgeSpawnMargin),
+                _ => new Vector2(_randomService.Value * _screenConfig.ScreenWidth - halfWidth, halfHeight + _spawningConfig.EdgeSpawnMargin)
             };
         }
 
         private Vector2 GetRandomVelocity(float speed)
         {
-            var angle = (float)(_random.NextDouble() * Math.PI * 2);
+            var angle = _randomService.Value * Mathf.PI * 2f;
             return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * speed;
         }
     }

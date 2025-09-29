@@ -4,17 +4,17 @@ namespace AsteroidsClone
 {
     public sealed class PlayerViewRenderer
     {
-        private GameConfig _config;
+        private ViewConfig _viewConfig;
         private GameObject _playerPrefab;
         private GameObject _playerView;
-        private ThrusterToggler _playerViewController;
+        private ThrusterToggler _thrusterToggler;
         private float _playerRotateThreshold;
 
-        public void Initialize(GameConfig config, GameObject playerPrefab)
+        public void Initialize(ViewConfig viewConfig, GameObject playerPrefab)      
         {
-            _config = config ?? throw new System.ArgumentNullException(nameof(config));
+            _viewConfig = viewConfig ?? throw new System.ArgumentNullException(nameof(viewConfig));
             _playerPrefab = playerPrefab ?? throw new System.ArgumentNullException(nameof(playerPrefab));
-            _playerRotateThreshold = config.PlayerViewRotationOffset;
+            _playerRotateThreshold = viewConfig.PlayerViewRotationOffset;
         }
 
         public void CreatePlayerView()
@@ -25,7 +25,7 @@ namespace AsteroidsClone
             }
             _playerView.SetActive(true);
 
-            _playerViewController = _playerView.GetComponent<ThrusterToggler>();
+            _thrusterToggler = _playerView.GetComponent<ThrusterToggler>();
         }
 
         public void UpdatePlayerView(Player player)
@@ -35,9 +35,9 @@ namespace AsteroidsClone
                 _playerView.transform.position = player.Position;
                 _playerView.transform.rotation = Quaternion.Euler(0, 0, player.Rotation + _playerRotateThreshold);
 
-                if (_playerViewController != null)
+                if (_thrusterToggler != null)
                 {
-                    _playerViewController.SetThrusterActive(player.IsThrusting);
+                    _thrusterToggler.SetThrusterActive(player.IsThrusting);
                 }
             }
         }

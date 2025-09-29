@@ -5,14 +5,14 @@ namespace AsteroidsClone
     public sealed class LaserParticleBeamManager
     {
         private ParticleSystem _laserParticle;
-        private GameConfig _config;
+        private WeaponsConfig _weaponsConfig;
         private float _laserTimer;
         private bool _isLaserActive;
 
-        public void Initialize(ParticleSystem laserParticle, GameConfig config)
+        public void Initialize(ParticleSystem laserParticle, WeaponsConfig weaponsConfig)
         {
             _laserParticle = laserParticle;
-            _config = config;
+            _weaponsConfig = weaponsConfig;
         }
 
         public void Update(float deltaTime)
@@ -38,7 +38,7 @@ namespace AsteroidsClone
             _laserParticle.transform.rotation = Quaternion.LookRotation(direction3D, up);
 
             _laserParticle.Play();
-            _laserTimer = _config.LaserVisualActiveTime;
+            _laserTimer = _weaponsConfig.LaserVisualActiveTime;
             _isLaserActive = true;
         }
 

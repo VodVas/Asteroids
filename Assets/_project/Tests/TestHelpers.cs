@@ -1,63 +1,130 @@
-using UnityEngine;
+//using UnityEngine;
 
-namespace AsteroidsClone.Tests
-{
-    public static class TestHelpers
-    {
-        public static GameConfig CreateValidConfig()
-        {
-            var config = ScriptableObject.CreateInstance<GameConfig>();
-            
-            var type = typeof(GameConfig);
-            
-            SetPrivateField(config, "_screenWidth", 20f);
-            SetPrivateField(config, "_screenHeight", 15f);
-            SetPrivateField(config, "_playerAcceleration", 10f);
-            SetPrivateField(config, "_playerMaxSpeed", 8f);
-            SetPrivateField(config, "_playerRotationSpeed", 180f);
-            SetPrivateField(config, "_playerDrag", 0.99f);
-            SetPrivateField(config, "_bulletSpeed", 15f);
-            SetPrivateField(config, "_bulletLifetime", 2f);
-            SetPrivateField(config, "_maxLaserCharges", 3);
-            SetPrivateField(config, "_laserRechargeTime", 5f);
-            SetPrivateField(config, "_laserRange", 50f);
-            SetPrivateField(config, "_laserVisualActiveTime", 1f);
-            SetPrivateField(config, "_bulletCooldown", 0.25f);
-            SetPrivateField(config, "_bulletInheritVelocityFactor", 0.5f);
-            SetPrivateField(config, "_asteroidSpeeds", new float[] { 2f, 3f, 4f });
-            SetPrivateField(config, "_asteroidScores", new int[] { 20, 50, 100 });
-            SetPrivateField(config, "_asteroidFragments", 2);
-            SetPrivateField(config, "_asteroidColliderRadiusPerSize", 0.3f);
-            SetPrivateField(config, "_asteroidFragmentOffsetDistance", 0.5f);
-            SetPrivateField(config, "_asteroidVisualScaleFactor", 0.2f);
-            SetPrivateField(config, "_defaultAsteroidSize", 3);
-            SetPrivateField(config, "_ufoSpeed", 3f);
-            SetPrivateField(config, "_ufoScore", 200);
-            SetPrivateField(config, "_ufoColliderRadius", 0.5f);
-            SetPrivateField(config, "_initialSpawnDelay", 3f);
-            SetPrivateField(config, "_minSpawnDelay", 0.5f);
-            SetPrivateField(config, "_spawnAcceleration", 0.95f);
-            SetPrivateField(config, "_initialAsteroidsCount", 3);
-            SetPrivateField(config, "_ufoSpawnDelayMultiplier", 3f);
-            SetPrivateField(config, "_edgeSpawnMargin", 1f);
-            SetPrivateField(config, "_asteroidPoolInitial", 20);
-            SetPrivateField(config, "_bulletPoolInitial", 30);
-            SetPrivateField(config, "_ufoPoolInitial", 5);
-            SetPrivateField(config, "_defaultColliderRadius", 0.3f);
-            SetPrivateField(config, "_thrustKey", KeyCode.W);
-            SetPrivateField(config, "_bulletKey", KeyCode.Space);
-            SetPrivateField(config, "_laserKey", KeyCode.LeftShift);
-            SetPrivateField(config, "_restartKey", KeyCode.R);
-            SetPrivateField(config, "_rotationAxis", "Horizontal");
-            
-            return config;
-        }
+//namespace AsteroidsClone.Tests
+//{
+//    public static class TestHelpers
+//    {
+
+//        public static ScreenConfig CreateValidScreenConfig()
+//        {
+//            var config = ScriptableObject.CreateInstance<ScreenConfig>();
+//            SetAutoPropertyBackingField(config, "ScreenWidth", 20f);
+//            SetAutoPropertyBackingField(config, "ScreenHeight", 15f);
+//            return config;
+//        }
+
+//        public static PlayerConfig CreateValidPlayerConfig()
+//        {
+//            var config = ScriptableObject.CreateInstance<PlayerConfig>();
+//            SetAutoPropertyBackingField(config, "PlayerAcceleration", 10f);
+//            SetAutoPropertyBackingField(config, "PlayerMaxSpeed", 8f);
+//            SetAutoPropertyBackingField(config, "PlayerRotationSpeed", 180f);
+//            SetAutoPropertyBackingField(config, "PlayerDrag", 0.99f);
+//            return config;
+//        }
+
+//        public static WeaponsConfig CreateValidWeaponsConfig()
+//        {
+//            var config = ScriptableObject.CreateInstance<WeaponsConfig>();
+//            SetAutoPropertyBackingField(config, "BulletSpeed", 15f);
+//            SetAutoPropertyBackingField(config, "BulletLifetime", 2f);
+//            SetAutoPropertyBackingField(config, "BulletCooldown", 0.25f);
+//            SetAutoPropertyBackingField(config, "BulletPositionOffset", 0.5f);
+//            SetAutoPropertyBackingField(config, "BulletInheritVelocityFactor", 0.5f);
+//            SetAutoPropertyBackingField(config, "VisualBulletRotationOffset", -90f);
+//            SetAutoPropertyBackingField(config, "MaxLaserCharges", 3);
+//            SetAutoPropertyBackingField(config, "LaserRechargeTime", 5f);
+//            SetAutoPropertyBackingField(config, "LaserRange", 50f);
+//            SetAutoPropertyBackingField(config, "LaserVisualActiveTime", 1f);
+//            return config;
+//        }
+
+//        public static AsteroidConfig CreateValidAsteroidConfig()
+//        {
+//            var config = ScriptableObject.CreateInstance<AsteroidConfig>();
+//            SetAutoPropertyBackingField(config, "AsteroidSpeeds", new float[] { 2f, 3f, 4f });
+//            SetAutoPropertyBackingField(config, "AsteroidScores", new int[] { 20, 50, 100 });
+//            SetAutoPropertyBackingField(config, "AsteroidFragments", 2);
+//            SetAutoPropertyBackingField(config, "AsteroidColliderRadiusPerSize", 0.3f);
+//            SetAutoPropertyBackingField(config, "AsteroidFragmentOffsetDistance", 0.5f);
+//            SetAutoPropertyBackingField(config, "AsteroidVisualScaleFactor", 0.2f);
+//            return config;
+//        }
+
+//        public static UfoConfig CreateValidUfoConfig()
+//        {
+//            var config = ScriptableObject.CreateInstance<UfoConfig>();
+//            SetAutoPropertyBackingField(config, "UfoSpeed", 3f);
+//            SetAutoPropertyBackingField(config, "UfoScore", 200);
+//            SetAutoPropertyBackingField(config, "UfoColliderRadius", 0.5f);
+//            return config;
+//        }
+
+//        public static SpawningConfig CreateValidSpawningConfig()
+//        {
+//            var config = ScriptableObject.CreateInstance<SpawningConfig>();
+//            SetAutoPropertyBackingField(config, "InitialSpawnDelay", 3f);
+//            SetAutoPropertyBackingField(config, "MinSpawnDelay", 0.5f);
+//            SetAutoPropertyBackingField(config, "SpawnAcceleration", 0.95f);
+//            SetAutoPropertyBackingField(config, "UfoSpawnDelayMultiplier", 3f);
+//            SetAutoPropertyBackingField(config, "InitialAsteroidsCount", 3);
+//            SetAutoPropertyBackingField(config, "DefaultAsteroidSize", 3);
+//            SetAutoPropertyBackingField(config, "EdgeSpawnMargin", 1f);
+//            return config;
+//        }
+
+//        public static ViewConfig CreateValidViewConfig()
+//        {
+//            var config = ScriptableObject.CreateInstance<ViewConfig>();
+//            SetAutoPropertyBackingField(config, "AsteroidPoolInitial", 20);
+//            SetAutoPropertyBackingField(config, "BulletPoolInitial", 30);
+//            SetAutoPropertyBackingField(config, "UfoPoolInitial", 5);
+//            SetAutoPropertyBackingField(config, "PlayerViewRotationOffset", 270f);
+//            return config;
+//        }
+
+//        public static CollisionConfig CreateValidCollisionConfig()
+//        {
+//            var config = ScriptableObject.CreateInstance<CollisionConfig>();
+//            SetAutoPropertyBackingField(config, "DefaultColliderRadius", 0.3f);
+//            return config;
+//        }
+
+//        public static InputConfig CreateValidInputConfig()
+//        {
+//            var config = ScriptableObject.CreateInstance<InputConfig>();
+//            SetAutoPropertyBackingField(config, "ThrustKey", KeyCode.W);
+//            SetAutoPropertyBackingField(config, "BulletKey", KeyCode.Space);
+//            SetAutoPropertyBackingField(config, "LaserKey", KeyCode.LeftShift);
+//            SetAutoPropertyBackingField(config, "RestartKey", KeyCode.R);
+//            SetAutoPropertyBackingField(config, "RotationAxis", "Horizontal");
+//            return config;
+//        }
+
         
-        private static void SetPrivateField(object obj, string fieldName, object value)
-        {
-            var field = obj.GetType().GetField(fieldName, 
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            field?.SetValue(obj, value);
-        }
-    }
-}
+//        /// <summary>
+//        /// Устанавливает значение backing field автосвойства с [field: SerializeField]
+//        /// </summary>
+//        public static void SetAutoPropertyBackingField(object obj, string propertyName, object value)
+//        {
+//            // Компилятор C# создаёт backing fields для автосвойств с именами вида <PropertyName>k__BackingField
+//            var backingFieldName = $"<{propertyName}>k__BackingField";
+//            var field = obj.GetType().GetField(backingFieldName, 
+//                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            
+//            if (field != null)
+//            {
+//                field.SetValue(obj, value);
+//            }
+//            else
+//            {
+//                // Fallback: пытаемся найти старое именование приватного поля
+//                var fallbackFieldName = $"_{char.ToLower(propertyName[0])}{propertyName.Substring(1)}";
+//                var fallbackField = obj.GetType().GetField(fallbackFieldName,
+//                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+//                fallbackField?.SetValue(obj, value);
+//            }
+//        }
+        
+//    }
+//}

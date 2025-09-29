@@ -8,7 +8,6 @@ namespace AsteroidsClone
         {
             Container.Bind<ObjectPoolManager>().AsSingle();
             Container.Bind<PlayerViewRenderer>().AsSingle();
-            Container.Bind<EntityViewSynchronizer>().AsSingle();
             Container.Bind<LaserParticleBeamManager>().AsSingle();
         }
     }

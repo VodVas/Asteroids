@@ -7,7 +7,7 @@ namespace AsteroidsClone
     {
         private readonly Dictionary<EntityType, Queue<GameObject>> _pools;
         private Dictionary<EntityType, GameObject> _prefabs;
-        private GameConfig _config;
+        private ViewConfig _viewConfig;
 
         public ObjectPoolManager()
         {
@@ -19,9 +19,9 @@ namespace AsteroidsClone
         };
         }
 
-        public void Initialize(GameConfig config, GameObject asteroidPrefab, GameObject bulletPrefab, GameObject ufoPrefab)
+        public void Initialize(ViewConfig viewConfig, GameObject asteroidPrefab, GameObject bulletPrefab, GameObject ufoPrefab)
         {
-            _config = config;
+            _viewConfig = viewConfig;
             _prefabs = new Dictionary<EntityType, GameObject>
         {
             { EntityType.Asteroid, asteroidPrefab },
@@ -32,9 +32,9 @@ namespace AsteroidsClone
 
         public void InitializePools()
         {
-            InitializePool(EntityType.Asteroid, _config.AsteroidPoolInitial);
-            InitializePool(EntityType.Bullet, _config.BulletPoolInitial);
-            InitializePool(EntityType.Ufo, _config.UfoPoolInitial);
+            InitializePool(EntityType.Asteroid, _viewConfig.AsteroidPoolInitial);
+            InitializePool(EntityType.Bullet, _viewConfig.BulletPoolInitial);
+            InitializePool(EntityType.Ufo, _viewConfig.UfoPoolInitial);
         }
 
         public GameObject GetFromPool(EntityType entityType)

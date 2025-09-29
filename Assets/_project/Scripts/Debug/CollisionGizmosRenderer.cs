@@ -5,76 +5,83 @@ namespace AsteroidsClone
 {
     public sealed class CollisionGizmosRenderer : MonoBehaviour
     {
-        private GameController _gameController;
-        private GameConfig _config;
+        private EntityRegistry _entityRegistry;
+        private Player _player;
+        private AsteroidConfig _asteroidConfig;
+        private CollisionConfig _collisionConfig;
+        private UfoConfig _ufoConfig;
 
         [Inject]
-        public void Construct(GameController gameController, GameConfig config)
+        public void Construct(EntityRegistry entityRegistry, Player player, AsteroidConfig asteroidConfig, 
+                            CollisionConfig collisionConfig, UfoConfig ufoConfig)
         {
-            _gameController = gameController;
-            _config = config;
+            _entityRegistry = entityRegistry;
+            _player = player;
+            _asteroidConfig = asteroidConfig;
+            _collisionConfig = collisionConfig;
+            _ufoConfig = ufoConfig;
         }
 
         private void OnDrawGizmos()
         {
-            if (_gameController == null || _gameController.EntityManager == null) return;
+            if (_entityRegistry == null) return;
 
             Gizmos.color = Color.red;
 
-            foreach (var entity in _gameController.EntityManager.Entities)
+            foreach (var entity in _entityRegistry.Entities)
             {
                 if (!entity.IsActive) continue;
 
                 if (entity is Asteroid asteroid)
                 {
-                    var radius = asteroid.Size * _config.AsteroidColliderRadiusPerSize;
+                    var radius = asteroid.Size * _asteroidConfig.AsteroidColliderRadiusPerSize;
                     Gizmos.DrawWireSphere(asteroid.Position, radius);
                 }
             }
 
-            if (_gameController.Player != null && _gameController.Player.IsAlive)
+            if (_player != null && _player.IsAlive)
             {
                 Gizmos.color = Color.green;
-                Gizmos.DrawWireSphere(_gameController.Player.Position, _config.DefaultColliderRadius);
+                Gizmos.DrawWireSphere(_player.Position, _collisionConfig.DefaultColliderRadius);
             }
 
             Gizmos.color = Color.blue;
 
-            foreach (var entity in _gameController.EntityManager.Entities)
+            foreach (var entity in _entityRegistry.Entities)
             {
                 if (!entity.IsActive) continue;
 
                 if (entity is Ufo)
                 {
-                    Gizmos.DrawWireSphere(entity.Position, _config.UfoColliderRadius);
+                    Gizmos.DrawWireSphere(entity.Position, _ufoConfig.UfoColliderRadius);
                 }
             }
 
             Gizmos.color = Color.yellow;
 
-            foreach (var entity in _gameController.EntityManager.Entities)
+            foreach (var entity in _entityRegistry.Entities)
             {
                 if (!entity.IsActive) continue;
 
                 if (entity is Bullet)
                 {
-                    Gizmos.DrawWireSphere(entity.Position, _config.DefaultColliderRadius);
+                    Gizmos.DrawWireSphere(entity.Position, _collisionConfig.DefaultColliderRadius);
                 }
             }
         }
 
         private void OnDrawGizmosSelected()
         {
-            if (_gameController == null || _gameController.EntityManager == null) return;
+            if (_entityRegistry == null) return;
 
-            foreach (var entity in _gameController.EntityManager.Entities)
+            foreach (var entity in _entityRegistry.Entities)
             {
                 if (!entity.IsActive) continue;
 
                 if (entity is Asteroid asteroid)
                 {
-                    var radius = asteroid.Size * _config.AsteroidColliderRadiusPerSize;
-                    var visualSize = asteroid.Size * _config.AsteroidVisualScaleFactor;
+                    var radius = asteroid.Size * _asteroidConfig.AsteroidColliderRadiusPerSize;
+                    var visualSize = asteroid.Size * _asteroidConfig.AsteroidVisualScaleFactor;
 
                     Gizmos.color = Color.red;
                     Gizmos.DrawWireSphere(asteroid.Position, radius);

@@ -6,10 +6,9 @@ namespace AsteroidsClone
     {
         public override void InstallBindings()
         {
-            Container.Bind<EntityRegistry>().AsSingle();
-            Container.Bind<IEntityManager>().To<EntityRegistry>().FromResolve();
-            Container.Bind<EntityFactory>().AsSingle();
-            Container.Bind<ISpawnService>().To<EntityFactory>().FromResolve();
+            Container.BindInterfacesAndSelfTo<EntityRegistry>().AsSingle();
+            Container.BindInterfacesAndSelfTo<EntityFactory>().AsSingle();
+            Container.BindInterfacesAndSelfTo<EntitySpawner>().AsSingle();
         }
     }
 }

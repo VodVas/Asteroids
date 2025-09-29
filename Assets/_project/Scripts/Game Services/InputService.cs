@@ -5,18 +5,18 @@ namespace AsteroidsClone
 {
     public sealed class InputService : IInputService
     {
-        private GameConfig _config;
+        private InputConfig _inputConfig;
 
-        public bool IsThrusting => Input.GetKey(_config.ThrustKey);
-        public float RotationInput => -Input.GetAxis(_config.RotationAxis);
-        public bool FireBullet => Input.GetKeyDown(_config.BulletKey);
-        public bool FireLaser => Input.GetKeyDown(_config.LaserKey);
-        public bool RestartGame => Input.GetKeyDown(_config.RestartKey);
+        public bool IsThrusting => Input.GetKey(_inputConfig.ThrustKey);
+        public float RotationInput => -Input.GetAxis(_inputConfig.RotationAxis);
+        public bool FireBullet => Input.GetKeyDown(_inputConfig.BulletKey);
+        public bool FireLaser => Input.GetKeyDown(_inputConfig.LaserKey);
+        public bool RestartGame => Input.GetKeyDown(_inputConfig.RestartKey);
 
         [Inject]
-        public void Construct(GameConfig config)
+        public void Construct(InputConfig inputConfig)
         {
-            _config = config;
+            _inputConfig = inputConfig;
         }
     }
 }

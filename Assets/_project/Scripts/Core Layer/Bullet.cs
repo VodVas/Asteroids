@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace AsteroidsClone
 {
@@ -6,6 +7,11 @@ namespace AsteroidsClone
     {
         private Vector2 _position;
         private float _lifetime;
+        private readonly float _halfScreenWidth;
+        private readonly float _halfScreenHeight;
+
+        public event Action<Vector2, float> OnTransformChanged;
+        public event Action OnDeactivated;
 
         public Vector2 Position => _position;
         public EntityType Type => EntityType.Bullet;
@@ -15,7 +21,7 @@ namespace AsteroidsClone
         public bool IsActive { get; private set; }
         public int Id { get; }
 
-        public Bullet(int id, Vector2 position, Vector2 velocity, float rotation, float lifetime)
+        public Bullet(int id, Vector2 position, Vector2 velocity, float rotation, float lifetime, ScreenConfig screenConfig)
         {
             Id = id;
             _position = position;
@@ -23,9 +29,12 @@ namespace AsteroidsClone
             Rotation = rotation;
             _lifetime = lifetime;
             IsActive = true;
+            
+            _halfScreenWidth = screenConfig.ScreenWidth / GameConstants.HALF_DIVISOR;
+            _halfScreenHeight = screenConfig.ScreenHeight / GameConstants.HALF_DIVISOR;
         }
 
-        public void Update(float deltaTime, GameConfig config)
+        public void Update(float deltaTime)
         {
             if (!IsActive) return;
 
@@ -35,22 +44,17 @@ namespace AsteroidsClone
             if (_lifetime <= 0)
             {
                 IsActive = false;
+                OnDeactivated?.Invoke();
                 return;
             }
 
-            var halfWidth = config.ScreenWidth / 2f;
-            var halfHeight = config.ScreenHeight / 2f;
+            if (_position.x > _halfScreenWidth) _position.x = -_halfScreenWidth;
+            else if (_position.x < -_halfScreenWidth) _position.x = _halfScreenWidth;
 
-            if (_position.x > halfWidth) _position.x = -halfWidth;
-            else if (_position.x < -halfWidth) _position.x = halfWidth;
+            if (_position.y > _halfScreenHeight) _position.y = -_halfScreenHeight;
+            else if (_position.y < -_halfScreenHeight) _position.y = _halfScreenHeight;
 
-            if (_position.y > halfHeight) _position.y = -halfHeight;
-            else if (_position.y < -halfHeight) _position.y = halfHeight;
-        }
-
-        public void Destroy()
-        {
-            IsActive = false;
+             OnTransformChanged?.Invoke(_position, Rotation);
         }
     }
 }

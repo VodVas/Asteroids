@@ -5,16 +5,14 @@ namespace AsteroidsClone
     public sealed class PlayerController : IDisposable
     {
         private readonly Player _player;
-        private readonly GameConfig _config;
         private readonly IInputService _inputService;
 
-        public Player Player => _player; //TODO под вопросом
+        public Player Player => _player;
         public event Action<Player> OnPlayerDestroyed;
 
-        public PlayerController(Player player, GameConfig config, IInputService inputService)
+        public PlayerController(Player player, IInputService inputService)
         {
             _player = player ?? throw new ArgumentNullException(nameof(player));
-            _config = config ?? throw new ArgumentNullException(nameof(config));
             _inputService = inputService ?? throw new ArgumentNullException(nameof(inputService));
 
             _player.OnDestroyed += OnPlayerDestroyed;
@@ -22,17 +20,17 @@ namespace AsteroidsClone
 
         public void Initialize()
         {
-            _player.Reset(_config);
+            _player.Reset();
         }
 
         public void Update(float deltaTime)
         {
             if (!_player.IsAlive) return;
 
-            _player.Rotate(_inputService.RotationInput, deltaTime, _config);
-            _player.Thrust(_inputService.IsThrusting, deltaTime, _config);
-            _player.UpdatePosition(deltaTime, _config);
-            _player.UpdateLaser(deltaTime, _config);
+            _player.Rotate(_inputService.RotationInput, deltaTime);
+            _player.Thrust(_inputService.IsThrusting, deltaTime);
+            _player.UpdatePosition(deltaTime);
+            _player.UpdateLaser(deltaTime);
         }
 
         public void Dispose()

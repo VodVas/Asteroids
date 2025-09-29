@@ -5,27 +5,27 @@ namespace AsteroidsClone
 {
     public sealed class GameControllerMono : MonoBehaviour
     {
-        private GameController _gameController;
+        private EntryPoint _gameOrchestrator;
 
         [Inject]
-        public void Construct(GameController gameController)
+        public void Construct(EntryPoint gameOrchestrator)
         {
-            _gameController = gameController;
+            _gameOrchestrator = gameOrchestrator;
         }
 
         private void Start()
         {
-            _gameController.Initialize();
+            _gameOrchestrator.Initialize();
         }
 
         private void Update()
         {
-            _gameController.Update(Time.deltaTime);
+            _gameOrchestrator.Update(Time.deltaTime);
         }
 
         private void OnDestroy()
         {
-            _gameController?.Dispose();
+            _gameOrchestrator?.Dispose();
         }
     }
 }
