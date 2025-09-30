@@ -9,5 +9,7 @@ namespace AsteroidsClone
         public const float INITIAL_ROTATION = 0f;
         public const float InitialLaserCooldown = 0f;
         public const int MAX_ASTEROID_SIZE_INDEX = 3;
+        public const float DOUBLE_PI = 6.283185f;
+        public const int SPAWN_SIDES_COUNT = 4;
     }
 }

@@ -50,7 +50,7 @@ namespace AsteroidsClone
 
         private Vector2 GetRandomEdgePosition()
         {
-            var side = _randomService.Range(0, 4);
+            var side = _randomService.Range(0, GameConstants.SPAWN_SIDES_COUNT);
             var halfWidth = _screenConfig.ScreenWidth / GameConstants.HALF_DIVISOR;
             var halfHeight = _screenConfig.ScreenHeight / GameConstants.HALF_DIVISOR;
 
@@ -65,7 +65,8 @@ namespace AsteroidsClone
 
         private Vector2 GetRandomVelocity(float speed)
         {
-            var angle = _randomService.Value * Mathf.PI * 2f;
+            //var angle = _randomService.Value * Mathf.PI * 2f;
+            var angle = _randomService.Value * GameConstants.DOUBLE_PI;
             return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * speed;
         }
     }

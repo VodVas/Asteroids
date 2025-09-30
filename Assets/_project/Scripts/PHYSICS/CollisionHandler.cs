@@ -66,7 +66,7 @@ namespace AsteroidsClone
             {
                 for (int i = 0; i < _asteroidConfig.AsteroidFragments; i++)
                 {
-                    var angle = i * (360f / _asteroidConfig.AsteroidFragments) * Mathf.Deg2Rad;
+                    var angle = i * (GameConstants.FULL_ROTATION_DEGREES / _asteroidConfig.AsteroidFragments) * Mathf.Deg2Rad;
                     var offset = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * _asteroidConfig.AsteroidFragmentOffsetDistance;
                     var fragmentAsteroid = _entityFactory.CreateAsteroid(asteroid.Position + offset, asteroid.Size - 1);
                     _entityRegistry.AddEntity(fragmentAsteroid);
