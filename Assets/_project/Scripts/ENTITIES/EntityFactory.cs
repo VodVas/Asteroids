@@ -65,7 +65,6 @@ namespace AsteroidsClone
 
         private Vector2 GetRandomVelocity(float speed)
         {
-            //var angle = _randomService.Value * Mathf.PI * 2f;
             var angle = _randomService.Value * GameConstants.DOUBLE_PI;
             return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * speed;
         }

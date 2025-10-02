@@ -12,6 +12,6 @@ namespace AsteroidsClone
         public bool IsGameOver => _gameState.IsGameOver;
 
         public void OnScoreEarned(int points) => _gameState.AddScore(points);
-        public void OnPlayerKilled() => _gameState.GameOver();
+        public void OnPlayerKilled() => _gameState.SetGameOver();
     }
 }

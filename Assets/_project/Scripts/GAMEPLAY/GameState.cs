@@ -6,15 +6,43 @@ namespace AsteroidsClone
     {
         private readonly AsteroidConfig _asteroidConfig;
         private readonly UfoConfig _ufoConfig;
-        
+        private int _score;
+        private bool _isGameOver;
         private int _nextEntityId;
 
         public event Action<int> OnScoreChanged;
         public event Action OnGameOver;
         public event Action OnGameRestarted;
 
-        public int Score { get; private set; }
-        public bool IsGameOver { get; private set; }
+        public int Score
+        {
+            get => _score;
+            private set
+            {
+                if (_score != value)
+                {
+                    _score = value;
+                    OnScoreChanged?.Invoke(_score);
+                }
+            }
+        }
+
+        public bool IsGameOver
+        {
+            get => _isGameOver;
+            private set
+            {
+                if (_isGameOver != value)
+                {
+                    _isGameOver = value;
+
+                    if (_isGameOver)
+                    {
+                        OnGameOver?.Invoke();
+                    }
+                }
+            }
+        }
 
         public GameState(AsteroidConfig asteroidConfig, UfoConfig ufoConfig)
         {
@@ -25,13 +53,11 @@ namespace AsteroidsClone
         public void AddScore(int points)
         {
             Score += points;
-            OnScoreChanged?.Invoke(Score);
         }
 
-        public void GameOver()
+        public void SetGameOver()
         {
             IsGameOver = true;
-            OnGameOver?.Invoke();
         }
 
         public void Reset()
@@ -59,7 +85,7 @@ namespace AsteroidsClone
         private void OnPlayerCollisionDetected(Player player, IGameEntity target)
         {
             player.Kill();
-            GameOver();
+            SetGameOver();
         }
 
         private void OnBulletCollisionDetected(Bullet bullet, IGameEntity target)
