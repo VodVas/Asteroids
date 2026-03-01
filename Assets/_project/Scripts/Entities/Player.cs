@@ -5,7 +5,6 @@ namespace AsteroidsClone
 {
     public sealed class Player
     {
-        private Vector2 _position;
         private readonly float _halfScreenWidth;
         private readonly float _halfScreenHeight;
         private readonly float _rotationSpeed;
@@ -18,9 +17,9 @@ namespace AsteroidsClone
         public event Action<Player> OnDestroyed;
         public event Action<int> OnLaserChargesChanged;
 
-        public Vector2 Position => _position;
         public float Speed => Velocity.magnitude;
 
+        public Vector2 Position { get; private set; }
         public Vector2 Velocity { get; private set; }
         public float Rotation { get; private set; }
         public int LaserCharges { get; private set; }
@@ -38,13 +37,13 @@ namespace AsteroidsClone
             _drag = playerConfig.PlayerDrag;
             _maxLaserCharges = weaponsConfig.MaxLaserCharges;
             _laserRechargeTime = weaponsConfig.LaserRechargeTime;
-            
+
             Reset();
         }
 
         public void Reset()
         {
-            _position = Vector2.zero;
+            Position = Vector2.zero;
             Velocity = Vector2.zero;
             Rotation = GameConstants.INITIAL_ROTATION;
             LaserCharges = _maxLaserCharges;
@@ -83,8 +82,8 @@ namespace AsteroidsClone
 
         public void UpdatePosition(float deltaTime)
         {
-            _position += Velocity * deltaTime;
-            _position = WrapPosition(_position);
+            Position += Velocity * deltaTime;
+            Position = WrapPosition(Position);
         }
 
         public void UpdateLaser(float deltaTime)
