@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace AsteroidsClone
 {
-    public sealed class CollisionProxy2D : MonoBehaviour //TODO: в папку
+    public sealed class CollisionProxy2D : MonoBehaviour
     {
         private enum ProxyType
         {
