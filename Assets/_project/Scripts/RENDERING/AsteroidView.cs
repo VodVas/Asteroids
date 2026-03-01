@@ -36,6 +36,7 @@ namespace AsteroidsClone
         public void UpdateScale(float scaleFactor)
         {
             _visualScaleFactor = scaleFactor;
+
             if (_entity is Asteroid asteroid)
             {
                 SetAsteroidScale(asteroid.Size);

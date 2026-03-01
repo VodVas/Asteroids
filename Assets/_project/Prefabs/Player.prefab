@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2313483196944339229}
   - component: {fileID: 1200558085806963228}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Thruster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,10 @@ GameObject:
   - component: {fileID: 142745037333852439}
   - component: {fileID: 6224691339214172817}
   - component: {fileID: 6245935144340087691}
-  m_Layer: 0
+  - component: {fileID: 2866324899622123147}
+  - component: {fileID: -244976457120645765}
+  - component: {fileID: -9213510047427365047}
+  m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,6 +187,91 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _thruster: {fileID: 6224739343326894049}
+--- !u!114 &2866324899622123147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8608986552707827408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c686eba4623ab94d92659c5ad637e73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _proxyType: 1
+--- !u!61 &-244976457120645765
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8608986552707827408}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.12, y: 0.75}
+    newSize: {x: 1.12, y: 0.75}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.12, y: 0.75}
+  m_EdgeRadius: 0
+--- !u!50 &-9213510047427365047
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8608986552707827408}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1001 &4553973114184139609
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -199,6 +287,10 @@ PrefabInstance:
     - target: {fileID: 6644403119194248211, guid: ea16f0a08582e0b499707630758d7f78, type: 3}
       propertyPath: m_Name
       value: Thruster
+      objectReference: {fileID: 0}
+    - target: {fileID: 6644403119194248211, guid: ea16f0a08582e0b499707630758d7f78, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6743540000484823897, guid: ea16f0a08582e0b499707630758d7f78, type: 3}
       propertyPath: m_LocalScale.x

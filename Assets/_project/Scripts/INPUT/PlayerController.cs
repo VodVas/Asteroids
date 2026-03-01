@@ -12,8 +12,8 @@ namespace AsteroidsClone
 
         public PlayerController(Player player, IInputService inputService)
         {
-            _player = player ?? throw new ArgumentNullException(nameof(player));
-            _inputService = inputService ?? throw new ArgumentNullException(nameof(inputService));
+            _player = player;
+            _inputService = inputService;
 
             _player.OnDestroyed += OnPlayerDestroyed;
         }

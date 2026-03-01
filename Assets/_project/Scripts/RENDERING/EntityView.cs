@@ -4,26 +4,32 @@ namespace AsteroidsClone
 {
     public class EntityView : MonoBehaviour
     {
-        [SerializeField] private EntityType _entityType;
-        
-        protected IGameEntity _entity;
-        protected bool _isLinked;
+        private bool _isLinked;
+        private EntityIdLink _idLink;
+
+        protected IGameEntity _entity { get; private set; }
 
         public virtual void LinkToEntity(IGameEntity entity)
         {
             UnlinkFromEntity();
-            
+
             _entity = entity;
-            
-            if (_entity != null)
+            if (_entity == null)
             {
-                _entity.OnTransformChanged += OnEntityTransformChanged;
-                _entity.OnDeactivated += OnEntityDeactivated;
-                _isLinked = true;
-                
-                OnEntityTransformChanged(_entity.Position, _entity.Rotation);
-                SetupInitialState();
+                return;
             }
+
+            _entity.OnTransformChanged += OnEntityTransformChanged;
+            _entity.OnDeactivated += OnEntityDeactivated;
+            _isLinked = true;
+
+            if (TryGetComponent(out _idLink))
+            {
+                _idLink.Bind(_entity);
+            }
+
+            OnEntityTransformChanged(_entity.Position, _entity.Rotation);
+            SetupInitialState();
         }
 
         public virtual void UnlinkFromEntity()
@@ -33,7 +39,12 @@ namespace AsteroidsClone
                 _entity.OnTransformChanged -= OnEntityTransformChanged;
                 _entity.OnDeactivated -= OnEntityDeactivated;
             }
-            
+
+            if (_idLink != null)
+            {
+                _idLink.Unbind();
+            }
+
             _entity = null;
             _isLinked = false;
         }
@@ -45,16 +56,22 @@ namespace AsteroidsClone
 
         private void OnEntityTransformChanged(Vector2 position, float rotation)
         {
-            if (!_isLinked) return;
-            
+            if (!_isLinked)
+            {
+                return;
+            }
+
             transform.position = position;
-            transform.rotation = Quaternion.Euler(0, 0, rotation);
+            transform.rotation = Quaternion.Euler(0f, 0f, rotation);
         }
 
         private void OnEntityDeactivated()
         {
-            if (!_isLinked) return;
-            
+            if (!_isLinked)
+            {
+                return;
+            }
+
             gameObject.SetActive(false);
             UnlinkFromEntity();
         }

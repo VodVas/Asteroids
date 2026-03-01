@@ -22,12 +22,13 @@ namespace AsteroidsClone
         private PlayerViewRenderer _playerViewRenderer;
         private EntityViewManager _entityViewManager;
         private LaserParticleBeamManager _laserParticleBeamManager;
+        private ICollisionTriggerRouter _collisionRouter;
 
         [Inject]
         public void Construct(GameState gameState, Player player, EntityRegistry entityRegistry,
             WeaponController weaponController, ViewConfig viewConfig, AsteroidConfig asteroidConfig, WeaponsConfig weaponsConfig,
             ObjectPoolManager poolManager, PlayerViewRenderer playerViewManager,
-            LaserParticleBeamManager laserEffectService)
+            LaserParticleBeamManager laserEffectService, ICollisionTriggerRouter collisionRouter)
         {
             _gameState = gameState;
             _player = player;
@@ -39,8 +40,9 @@ namespace AsteroidsClone
             _poolManager = poolManager;
             _playerViewRenderer = playerViewManager;
             _laserParticleBeamManager = laserEffectService;
-            
-            _entityViewManager = new EntityViewManager(_poolManager, _asteroidConfig);
+            _collisionRouter = collisionRouter;
+
+            _entityViewManager = new EntityViewManager(_poolManager, _asteroidConfig, _collisionRouter);
         }
 
         private void Start()
@@ -68,26 +70,26 @@ namespace AsteroidsClone
             if (_gameState == null || _player == null || _entityRegistry == null) return;
 
             _playerViewRenderer.UpdatePlayerView(_player);
-            
+
             UpdateEntityViews();
-            
+
             _laserParticleBeamManager?.Update(Time.deltaTime);
         }
 
         private void UpdateEntityViews()
         {
             var entities = _entityRegistry.Entities;
-            
+
             foreach (var entity in entities)
             {
                 if (!entity.IsActive) continue;
-                
+
                 if (!_entityViewManager.HasView(entity.Id))
                 {
                     _entityViewManager.CreateEntityView(entity);
                 }
             }
-            
+
             _entityViewManager.CleanupInactiveViews(entities);
         }
 
@@ -95,7 +97,7 @@ namespace AsteroidsClone
         {
             _poolManager.Initialize(_viewConfig, _asteroidPrefab, _bulletPrefab, _ufoPrefab);
             _poolManager.InitializePools();
-            _playerViewRenderer.Initialize(_viewConfig, _playerPrefab);
+            _playerViewRenderer.Initialize(_viewConfig, _playerPrefab, _collisionRouter);
         }
 
         private void CreateViews()
@@ -117,10 +119,10 @@ namespace AsteroidsClone
         {
             if (_player != null)
                 _player.OnDestroyed -= OnPlayerDestroyed;
-                
+
             if (_gameState != null)
                 _gameState.OnGameRestarted -= OnGameRestarted;
-                
+
             if (_weaponController != null)
                 _weaponController.OnLaserFired -= _laserParticleBeamManager.FireLaser;
         }

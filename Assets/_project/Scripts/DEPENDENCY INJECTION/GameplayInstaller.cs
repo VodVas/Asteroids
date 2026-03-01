@@ -7,7 +7,6 @@ public sealed class GameplayInstaller : MonoInstaller
     {
         Container.BindInterfacesAndSelfTo<CollisionDetector>().AsSingle();
 
-        Container.Bind<CollisionMath>().AsSingle();
         Container.Bind<CollisionHandler>().AsSingle();
         Container.Bind<PlayerController>().AsSingle();
         Container.Bind<WeaponController>().AsSingle();

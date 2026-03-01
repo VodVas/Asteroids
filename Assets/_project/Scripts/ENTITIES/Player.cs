@@ -48,7 +48,7 @@ namespace AsteroidsClone
             Velocity = Vector2.zero;
             Rotation = GameConstants.INITIAL_ROTATION;
             LaserCharges = _maxLaserCharges;
-            LaserCooldown = GameConstants.InitialLaserCooldown;
+            LaserCooldown = GameConstants.INITIALLASERCOOLDOWN;
             IsThrusting = false;
             IsAlive = true;
         }
@@ -96,7 +96,7 @@ namespace AsteroidsClone
                 if (LaserCooldown >= _laserRechargeTime)
                 {
                     LaserCharges++;
-                    LaserCooldown = GameConstants.InitialLaserCooldown;
+                    LaserCooldown = GameConstants.INITIALLASERCOOLDOWN;
                     OnLaserChargesChanged?.Invoke(LaserCharges);
                 }
             }
@@ -107,7 +107,7 @@ namespace AsteroidsClone
             if (LaserCharges > 0)
             {
                 LaserCharges--;
-                LaserCooldown = GameConstants.InitialLaserCooldown;
+                LaserCooldown = GameConstants.INITIALLASERCOOLDOWN;
                 OnLaserChargesChanged?.Invoke(LaserCharges);
 
                 return true;

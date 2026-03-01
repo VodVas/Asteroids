@@ -15,23 +15,19 @@ namespace AsteroidsClone
         private readonly WeaponController _weaponController;
         private readonly EntityController _entityController;
 
-        public event Action<Vector2, Vector2> OnLaserFired;
-
         public EntryPoint(SpawningConfig spawningConfig, IInputService inputService, GameState gameState,
             PlayerController playerController, WeaponController weaponController, EntityController entityController,
             IEntitySpawner entitySpawner, ICollisionDetector collisionService, CollisionHandler collisionHandler)
         {
-            _spawningConfig = spawningConfig ?? throw new ArgumentNullException(nameof(spawningConfig));
-            _inputService = inputService ?? throw new ArgumentNullException(nameof(inputService));
-            _gameState = gameState ?? throw new ArgumentNullException(nameof(gameState));
-            _playerController = playerController ?? throw new ArgumentNullException(nameof(playerController));
-            _weaponController = weaponController ?? throw new ArgumentNullException(nameof(weaponController));
-            _entityController = entityController ?? throw new ArgumentNullException(nameof(entityController));
-            _entitySpawner = entitySpawner ?? throw new ArgumentNullException(nameof(entitySpawner));
-            _collisionDetector = collisionService ?? throw new ArgumentNullException(nameof(collisionService));
-            _collisionHandler = collisionHandler ?? throw new ArgumentNullException(nameof(collisionHandler));
-
-            _weaponController.OnLaserFired += (origin, direction) => OnLaserFired?.Invoke(origin, direction);
+            _spawningConfig = spawningConfig;
+            _inputService = inputService;
+            _gameState = gameState;
+            _playerController = playerController;
+            _weaponController = weaponController;
+            _entityController = entityController;
+            _entitySpawner = entitySpawner;
+            _collisionDetector = collisionService;
+            _collisionHandler = collisionHandler;
         }
 
         public void Initialize()

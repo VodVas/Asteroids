@@ -13,7 +13,6 @@ namespace AsteroidsClone
         [SerializeField] private UfoConfig _ufoConfig;
         [SerializeField] private SpawningConfig _spawningConfig;
         [SerializeField] private ViewConfig _viewConfig;
-        [SerializeField] private CollisionConfig _collisionConfig;
         [SerializeField] private InputConfig _inputConfig;
 
         public override void InstallBindings()
@@ -27,7 +26,6 @@ namespace AsteroidsClone
             Container.Bind<UfoConfig>().FromInstance(_ufoConfig).AsSingle();
             Container.Bind<SpawningConfig>().FromInstance(_spawningConfig).AsSingle();
             Container.Bind<ViewConfig>().FromInstance(_viewConfig).AsSingle();
-            Container.Bind<CollisionConfig>().FromInstance(_collisionConfig).AsSingle();
             Container.Bind<InputConfig>().FromInstance(_inputConfig).AsSingle();
             Container.Bind<GameState>().AsSingle();
             Container.Bind<Player>().AsSingle();
@@ -45,7 +43,6 @@ namespace AsteroidsClone
             if (_ufoConfig == null) throw new ArgumentNullException(nameof(_ufoConfig));
             if (_spawningConfig == null) throw new ArgumentNullException(nameof(_spawningConfig));
             if (_viewConfig == null) throw new ArgumentNullException(nameof(_viewConfig));
-            if (_collisionConfig == null) throw new ArgumentNullException(nameof(_collisionConfig));
             if (_inputConfig == null) throw new ArgumentNullException(nameof(_inputConfig));
         }
     }

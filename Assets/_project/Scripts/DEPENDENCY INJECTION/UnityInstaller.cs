@@ -7,7 +7,6 @@ namespace AsteroidsClone
         public override void InstallBindings()
         {
             Container.Bind<GameControllerMono>().FromNewComponentOnNewGameObject().AsSingle().NonLazy();
-            Container.Bind<CollisionGizmosRenderer>().FromNewComponentOnNewGameObject().AsSingle().NonLazy();
         }
     }
 }

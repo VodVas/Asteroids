@@ -2,7 +2,7 @@
 
 namespace AsteroidsClone
 {
-    public sealed class EntityRegistry : IEntityManager
+    public sealed class EntityRegistry : IEntityRegistry
     {
         private readonly List<IGameEntity> _entities = new List<IGameEntity>();
         private readonly List<IGameEntity> _entitiesToAdd = new List<IGameEntity>();
@@ -40,17 +40,6 @@ namespace AsteroidsClone
             _entities.Clear();
             _entitiesToAdd.Clear();
             _entitiesToRemove.Clear();
-        }
-
-        public IEnumerable<T> GetEntitiesOfType<T>() where T : class, IGameEntity
-        {
-            foreach (var entity in _entities)
-            {
-                if (entity is T typedEntity && entity.IsActive)
-                {
-                    yield return typedEntity;
-                }
-            }
         }
     }
 }

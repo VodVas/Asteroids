@@ -1,20 +1,16 @@
-using System;
-
 namespace AsteroidsClone
 {
     public sealed class EntityController
     {
-        private readonly EntityRegistry _entityRegistry;
+        private readonly IEntityRegistry _entityRegistry;
         private readonly UfoConfig _ufoConfig;
         private readonly Player _player;
 
-        public EntityRegistry EntityRegistry => _entityRegistry;
-
-        public EntityController(EntityRegistry entityManager, UfoConfig ufoConfig, Player player)
+        public EntityController(IEntityRegistry entityManager, UfoConfig ufoConfig, Player player)
         {
-            _entityRegistry = entityManager ?? throw new ArgumentNullException(nameof(entityManager));
-            _ufoConfig = ufoConfig ?? throw new ArgumentNullException(nameof(ufoConfig));
-            _player = player ?? throw new ArgumentNullException(nameof(player));
+            _entityRegistry = entityManager;
+            _ufoConfig = ufoConfig;
+            _player = player;
         }
 
         public void Initialize()

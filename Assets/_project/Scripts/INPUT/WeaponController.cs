@@ -9,22 +9,22 @@ namespace AsteroidsClone
         private readonly WeaponsConfig _weaponsConfig;
         private readonly IInputService _inputService;
         private readonly IEntityFactory _entityFactory;
-        private readonly EntityRegistry _entityRegistry;
-        private readonly CollisionDetector _collisionDetector;
+        private readonly IEntityRegistry _entityRegistry;
+        private readonly ICollisionDetector _collisionDetector;
 
         private float _bulletCooldown;
 
         public event Action<Vector2, Vector2> OnLaserFired;
 
         public WeaponController(Player player, WeaponsConfig weaponsConfig, IInputService inputService,
-            IEntityFactory entityFactory, EntityRegistry entityRegistry, CollisionDetector collisionService)
+            IEntityFactory entityFactory, IEntityRegistry entityRegistry, ICollisionDetector collisionService)
         {
-            _player = player ?? throw new ArgumentNullException(nameof(player));
-            _weaponsConfig = weaponsConfig ?? throw new ArgumentNullException(nameof(weaponsConfig));
-            _inputService = inputService ?? throw new ArgumentNullException(nameof(inputService));
-            _entityFactory = entityFactory ?? throw new ArgumentNullException(nameof(entityFactory));
-            _entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
-            _collisionDetector = collisionService ?? throw new ArgumentNullException(nameof(collisionService));
+            _player = player;
+            _weaponsConfig = weaponsConfig;
+            _inputService = inputService;
+            _entityFactory = entityFactory;
+            _entityRegistry = entityRegistry;
+            _collisionDetector = collisionService;
         }
 
         public void Update(float deltaTime)

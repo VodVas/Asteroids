@@ -6,7 +6,7 @@ namespace AsteroidsClone
     {
         void Update(float deltaTime);
         void Reset();
-        void SpawnAsteroid(Vector2? position = null, int size = 0);
+        void SpawnAsteroid();
         void SpawnUfo();
     }
 }

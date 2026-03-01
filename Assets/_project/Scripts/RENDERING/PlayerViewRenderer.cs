@@ -9,11 +9,13 @@ namespace AsteroidsClone
         private GameObject _playerView;
         private ThrusterToggler _thrusterToggler;
         private float _playerRotateThreshold;
+        private ICollisionTriggerRouter _collisionRouter;
 
-        public void Initialize(ViewConfig viewConfig, GameObject playerPrefab)      
+        public void Initialize(ViewConfig viewConfig, GameObject playerPrefab, ICollisionTriggerRouter collisionRouter)
         {
             _viewConfig = viewConfig ?? throw new System.ArgumentNullException(nameof(viewConfig));
             _playerPrefab = playerPrefab ?? throw new System.ArgumentNullException(nameof(playerPrefab));
+            _collisionRouter = collisionRouter ?? throw new System.ArgumentNullException(nameof(collisionRouter));
             _playerRotateThreshold = viewConfig.PlayerViewRotationOffset;
         }
 
@@ -23,8 +25,13 @@ namespace AsteroidsClone
             {
                 _playerView = Object.Instantiate(_playerPrefab);
             }
-            _playerView.SetActive(true);
 
+            if (_playerView.TryGetComponent(out CollisionProxy2D proxy))
+            {
+                proxy.Initialize(_collisionRouter);
+            }
+
+            _playerView.SetActive(true);
             _thrusterToggler = _playerView.GetComponent<ThrusterToggler>();
         }
 

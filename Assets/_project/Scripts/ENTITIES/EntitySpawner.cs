@@ -13,11 +13,11 @@ namespace AsteroidsClone
         private float _ufoSpawnTimer;
         private float _currentSpawnDelay;
 
-        public EntitySpawner(IEntityFactory entityFactory, EntityRegistry entityManager, 
+        public EntitySpawner(IEntityFactory entityFactory, EntityRegistry entityRegistry, 
                            SpawningConfig spawningConfig, GameState gameState)
         {
             _entityFactory = entityFactory;
-            _entityRegistry = entityManager;
+            _entityRegistry = entityRegistry;
             _spawningConfig = spawningConfig;
             _gameState = gameState;
             _currentSpawnDelay = spawningConfig.InitialSpawnDelay;
@@ -44,9 +44,9 @@ namespace AsteroidsClone
             }
         }
 
-        public void SpawnAsteroid(Vector2? position = null, int size = 0)
+        public void SpawnAsteroid()
         {
-            var asteroid = _entityFactory.CreateAsteroid(position, size);
+            var asteroid = _entityFactory.CreateAsteroid();
             _entityRegistry.AddEntity(asteroid);
         }
 

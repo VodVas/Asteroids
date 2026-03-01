@@ -6,14 +6,14 @@ namespace AsteroidsClone
     public sealed class CollisionHandler
     {
         private readonly AsteroidConfig _asteroidConfig;
-        private readonly EntityRegistry _entityRegistry;
+        private readonly IEntityRegistry _entityRegistry;
         private readonly IEntityFactory _entityFactory;
 
         public event Action<Player, IGameEntity> PlayerCollisionDetected;
         public event Action<Bullet, IGameEntity> BulletCollisionDetected;
         public event Action<IGameEntity> LaserHitDetected;
 
-        public CollisionHandler(AsteroidConfig asteroidConfig, EntityRegistry entityManager, IEntityFactory entityFactory)
+        public CollisionHandler(AsteroidConfig asteroidConfig, IEntityRegistry entityManager, IEntityFactory entityFactory)
         {
             _asteroidConfig = asteroidConfig;
             _entityRegistry = entityManager;

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using R3;
 
 namespace AsteroidsClone
 {
@@ -7,19 +7,19 @@ namespace AsteroidsClone
         private readonly GameState _gameState;
         private readonly Player _player;
 
-        public readonly ReactiveProperty<string> ScoreText = new();
-        public readonly ReactiveProperty<string> LaserChargesText = new();
-        public readonly ReactiveProperty<string> PositionText = new();
-        public readonly ReactiveProperty<string> RotationText = new();
-        public readonly ReactiveProperty<string> SpeedText = new();
-        public readonly ReactiveProperty<string> CooldownText = new();
-        public readonly ReactiveProperty<bool> GameOverPanelVisible = new();
-        public readonly ReactiveProperty<string> FinalScoreText = new();
+        public ReactiveProperty<string> ScoreText { get; } = new();
+        public ReactiveProperty<string> LaserChargesText { get; } = new();
+        public ReactiveProperty<string> PositionText { get; } = new();
+        public ReactiveProperty<string> RotationText { get; } = new();
+        public ReactiveProperty<string> SpeedText { get; } = new();
+        public ReactiveProperty<string> CooldownText { get; } = new();
+        public ReactiveProperty<bool> GameOverPanelVisible { get; } = new();
+        public ReactiveProperty<string> FinalScoreText { get; } = new();
 
         public GameUIViewModel(GameState gameState, Player player)
         {
-            _gameState = gameState ?? throw new ArgumentNullException(nameof(gameState));
-            _player = player ?? throw new ArgumentNullException(nameof(player));
+            _gameState = gameState;
+            _player = player;
 
             _gameState.OnScoreChanged += OnScoreChanged;
             _gameState.OnGameOver += OnGameOver;
@@ -53,20 +53,14 @@ namespace AsteroidsClone
             }
         }
 
-        private void OnScoreChanged(int score)
-        {
-            ScoreText.Value = $"{score}";
-        }
+        private void OnScoreChanged(int score) => ScoreText.Value = $"{score}";
+        private void OnGameRestarted() => GameOverPanelVisible.Value = false;
+
 
         private void OnGameOver()
         {
             GameOverPanelVisible.Value = true;
             FinalScoreText.Value = $"Final Score: {_gameState.Score}";
-        }
-
-        private void OnGameRestarted()
-        {
-            GameOverPanelVisible.Value = false;
         }
 
         private void OnLaserChargesChanged(int charges)

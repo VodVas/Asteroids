@@ -1,4 +1,7 @@
-﻿using TMPro;
+﻿using R3;
+using System;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using Zenject;
 
@@ -16,61 +19,83 @@ namespace AsteroidsClone
         [SerializeField] private GameObject _gameOverPanel;
 
         private GameUIViewModel _viewModel;
+        private readonly List<IDisposable> _subscriptions = new();
 
         [Inject]
-        public void Construct(GameState gameState, Player player)
+        public void Construct(GameUIViewModel viewModel)
         {
-            _viewModel = new GameUIViewModel(gameState, player);
+            _viewModel = viewModel;
+        }
 
-            _viewModel.ScoreText.OnChanged += UpdateScoreText;
-            _viewModel.LaserChargesText.OnChanged += UpdateLaserChargesText;
-            _viewModel.PositionText.OnChanged += UpdatePositionText;
-            _viewModel.RotationText.OnChanged += UpdateRotationText;
-            _viewModel.SpeedText.OnChanged += UpdateSpeedText;
-            _viewModel.CooldownText.OnChanged += UpdateCooldownText;
-            _viewModel.GameOverPanelVisible.OnChanged += UpdateGameOverPanel;
-            _viewModel.FinalScoreText.OnChanged += UpdateFinalScoreText;
+        private void OnEnable()
+        {
+            if (_viewModel == null) return;
 
-            _gameOverPanel.SetActive(false);
+            SubscribeToViewModel();
+            ApplyCurrentValues();
         }
 
         private void Update()
         {
-            if (_viewModel != null)
+            _viewModel?.UpdatePlayerStats();
+        }
+
+        private void OnDisable()
+        {
+            DisposeSubscriptions();
+        }
+
+        private void OnDestroy()
+        {
+            DisposeSubscriptions();
+
+            _viewModel?.Dispose();
+            _viewModel = null;
+        }
+
+        private void SubscribeToViewModel()
+        {
+            if (_subscriptions.Count > 0) return;
+
+            _subscriptions.Add(_viewModel.ScoreText.Subscribe(UpdateScoreText));
+            _subscriptions.Add(_viewModel.LaserChargesText.Subscribe(UpdateLaserChargesText));
+            _subscriptions.Add(_viewModel.PositionText.Subscribe(UpdatePositionText));
+            _subscriptions.Add(_viewModel.RotationText.Subscribe(UpdateRotationText));
+            _subscriptions.Add(_viewModel.SpeedText.Subscribe(UpdateSpeedText));
+            _subscriptions.Add(_viewModel.CooldownText.Subscribe(UpdateCooldownText));
+            _subscriptions.Add(_viewModel.GameOverPanelVisible.Subscribe(UpdateGameOverPanel));
+            _subscriptions.Add(_viewModel.FinalScoreText.Subscribe(UpdateFinalScoreText));
+        }
+
+        private void ApplyCurrentValues()
+        {
+            UpdateScoreText(_viewModel.ScoreText.Value);
+            UpdateLaserChargesText(_viewModel.LaserChargesText.Value);
+            UpdatePositionText(_viewModel.PositionText.Value);
+            UpdateRotationText(_viewModel.RotationText.Value);
+            UpdateSpeedText(_viewModel.SpeedText.Value);
+            UpdateCooldownText(_viewModel.CooldownText.Value);
+            UpdateGameOverPanel(_viewModel.GameOverPanelVisible.Value);
+            UpdateFinalScoreText(_viewModel.FinalScoreText.Value);
+        }
+
+        private void DisposeSubscriptions()
+        {
+            for (int i = 0; i < _subscriptions.Count; i++)
             {
-                _viewModel.UpdatePlayerStats();
+                _subscriptions[i]?.Dispose();
             }
+
+            _subscriptions.Clear();
         }
 
-        private void UpdateScoreText(string text)
-        {
-            _scoreText.text = text;
-        }
-
-        private void UpdateLaserChargesText(string text)
-        {
-            _laserChargesText.text = text;
-        }
-
-        private void UpdatePositionText(string text)
-        {
-            _coordinatesText.text = text;
-        }
-
-        private void UpdateRotationText(string text)
-        {
-            _rotationText.text = text;
-        }
-
-        private void UpdateSpeedText(string text)
-        {
-            _speedText.text = text;
-        }
-
-        private void UpdateCooldownText(string text)
-        {
-            _laserCooldownText.text = text;
-        }
+        private void UpdateScoreText(string text) => _scoreText.text = text;
+        private void UpdateLaserChargesText(string text) => _laserChargesText.text = text;
+        private void UpdatePositionText(string text) => _coordinatesText.text = text;
+        private void UpdateRotationText(string text) => _rotationText.text = text;
+        private void UpdateSpeedText(string text) => _speedText.text = text;
+        private void UpdateCooldownText(string text) => _laserCooldownText.text = text;
+        private void UpdateFinalScoreText(string text) => _finalScoreText.text = text;
 
         private void UpdateGameOverPanel(bool visible)
         {
@@ -79,29 +104,6 @@ namespace AsteroidsClone
             if (visible)
             {
                 _finalScoreText.text = $"Final Score: {_viewModel.ScoreText.Value}";
-            }
-        }
-
-        private void UpdateFinalScoreText(string text)
-        {
-            _finalScoreText.text = text;
-        }
-
-        private void OnDestroy()
-        {
-            if (_viewModel != null)
-            {
-                _viewModel.ScoreText.OnChanged -= UpdateScoreText;
-                _viewModel.LaserChargesText.OnChanged -= UpdateLaserChargesText;
-                _viewModel.PositionText.OnChanged -= UpdatePositionText;
-                _viewModel.RotationText.OnChanged -= UpdateRotationText;
-                _viewModel.SpeedText.OnChanged -= UpdateSpeedText;
-                _viewModel.CooldownText.OnChanged -= UpdateCooldownText;
-                _viewModel.GameOverPanelVisible.OnChanged -= UpdateGameOverPanel;
-                _viewModel.FinalScoreText.OnChanged -= UpdateFinalScoreText;
-
-                _viewModel.Dispose();
-                _viewModel = null;
             }
         }
     }
